@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <pattern id="haz" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="20" height="40" fill="#e8a020"/><rect x="20" width="20" height="40" fill="#1c1712"/>
+    </pattern>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="#2a221a"/>
+  <rect y="402" width="512" height="54" fill="url(#haz)"/>
+  <!-- traktori ylhäältä -->
+  <g transform="translate(256 220) rotate(-90)">
+    <rect x="-96" y="-118" width="84" height="54" rx="12" fill="#141414"/>
+    <rect x="-96" y="64" width="84" height="54" rx="12" fill="#141414"/>
+    <rect x="74" y="-84" width="48" height="30" rx="8" fill="#141414"/>
+    <rect x="74" y="54" width="48" height="30" rx="8" fill="#141414"/>
+    <rect x="-120" y="-70" width="70" height="140" rx="16" fill="#8a5a10"/>
+    <rect x="-20" y="-46" width="160" height="92" rx="20" fill="#e8a020"/>
+    <rect x="0" y="-14" width="110" height="28" fill="#f6c860"/>
+    <rect x="-112" y="-58" width="88" height="116" rx="12" fill="#9fd0e0" opacity="0.8"/>
+    <circle cx="-68" cy="0" r="22" fill="#2a2a2a"/>
+    <path d="M140 -40 L172 -26 L140 -14 Z M140 14 L172 26 L140 40 Z" fill="#d8d0c0"/>
+  </g>
+</svg>

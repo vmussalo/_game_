@@ -1,0 +1,28 @@
+// Uran sivupolkujen testit: node scripts/test-career.js
+global.window = global; global.location = { search: '' };
+const path = require('path');
+for (const f of ['util', 'text', 'data', 'track', 'race', 'career']) require(path.join(__dirname, '..', 'peli', 'js', f + '.js'));
+const C = AR.Career; let fails = 0;
+const ok = (cond, msg) => { console.log((cond ? 'OK  ' : 'VIKA') + ' ' + msg); if (!cond) fails++; };
+const c = C.create('Testi');
+ok(c.offers.length === 3 && c.offers.every(o => o.opp.length === 3), 'kolme kisatarjousta, kolme vastustajaa');
+ok(C.rank(c) === 17, 'aloitussija viimeinen');
+C.borrow(c, 5000); ok(c.cash === 5600 && c.debt === 5000 && c.debtDue === 8, 'laina: raha, velka ja eräpäivä');
+const r1 = C.sabotage(c, 0); ok(r1.ok && c.offers[0].sab !== -1 && c.cash === 5300, 'sabotaasi maksaa ja merkitsee vastustajan');
+const ent = C.entrants(c, c.offers[0]); ok(ent.filter(e => e.hpFrac === 0.5).length === 1 && ent.filter(e => e.isPlayer).length === 1, 'sabotoitu lähtee puolikuntoisena');
+C.buyVehicle(c, 1); ok(c.vi === 1 && c.cash === 5300 - 2600, 'mönkijän osto');
+c.hpFrac = 0.5; const hp0 = C.stats(c).hp * c.hpFrac; C.buyUpgrade(c, 'armor');
+ok(Math.abs(C.stats(c).hp * c.hpFrac - (hp0 + (C.stats(c).hp - AR.buildStats(1, { armor: 0 }).hp))) < 1, 'panssari lisää kuntopisteitä, vauriot säilyvät');
+c.up.engine = 2;
+for (let i = 0; i < 8; i++) C.nextDay(c, new Set());
+ok(c.debt > 5000 * 1.25, 'korko ja perijöiden lisä kasvattivat velkaa: ' + c.debt);
+ok(c.hpFrac <= 0.4 && c.debtDue > c.day, 'perijät kävivät: kunto ' + c.hpFrac.toFixed(2) + ', uusi eräpäivä ' + c.debtDue);
+c.cash = 100000; C.repay(c, c.debt); ok(c.debt === 0 && c.debtDue === 0, 'velka maksettu');
+c.hpFrac = 0.1; ok(C.canTape(c) && C.tape(c).ok && c.hpFrac === 0.35, 'teippikorjaus 35 %:iin');
+C.repair(c); ok(c.hpFrac === 1, 'täysi korjaus');
+c.points = 9999; C.genOffers(c); const fin = c.offers.find(o => o.final);
+ok(fin && fin.opp[0] === 'boss' && fin.track === AR.FINAL_TRACK, 'finaali avautuu sarjan kärjessä');
+const fe = C.entrants(c, fin); ok(fe[2].isPlayer && fe.some(e => e.driverId === 'boss'), 'finaalissa pelaaja toisessa rivissä, pomo mukana');
+const res = fe.map((e, i) => ({ isPlayer: !!e.isPlayer, driverId: e.driverId, place: e.isPlayer ? 1 : i + 2 > 4 ? 4 : i + 2, kills: 0, cash: 0, wrecked: false, hpFrac: 0.8, ammo: 10, mines: 0, turbo: 0 }));
+const sum = C.applyResult(c, fin, res); ok(sum.ending && c.won && sum.prize === AR.DIFF[3].prize[0], 'finaalivoitto: loppu ja palkinto');
+console.log(fails ? fails + ' VIKAA' : 'Kaikki testit OK');

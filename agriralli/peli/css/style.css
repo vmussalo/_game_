@@ -1,0 +1,211 @@
+/* AgriRalli – tyylit. Teema: html[data-theme-game="dystopia" | "kyla"] */
+:root {
+  --bg: rgba(14, 11, 8, 0.80);
+  --panel: rgba(30, 24, 18, 0.94);
+  --panel2: rgba(48, 39, 30, 0.95);
+  --ink: #eadfc9;
+  --muted: #a89a82;
+  --accent: #e8a020;
+  --accent2: #c0442b;
+  --good: #5cb85c;
+  --line: rgba(232, 160, 32, 0.35);
+  --btn: #3a2f24;
+  --btnInk: #f2e6cf;
+  --head: Impact, 'Arial Black', 'Segoe UI Black', system-ui, sans-serif;
+  --stripe: repeating-linear-gradient(-45deg, #e8a020 0 10px, #1a1510 10px 20px);
+  color-scheme: dark;
+}
+html[data-theme-game="kyla"] {
+  --bg: rgba(40, 60, 25, 0.55);
+  --panel: rgba(247, 240, 222, 0.96);
+  --panel2: rgba(236, 226, 198, 0.97);
+  --ink: #2b2116;
+  --muted: #6d5e48;
+  --accent: #b8321f;
+  --accent2: #3f7a2a;
+  --good: #3f7a2a;
+  --line: rgba(120, 90, 50, 0.35);
+  --btn: #e3d4ae;
+  --btnInk: #2b2116;
+  --head: 'Arial Black', 'Segoe UI Black', system-ui, sans-serif;
+  --stripe: repeating-linear-gradient(90deg, #b8321f 0 14px, #f7f0de 14px 18px);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #14100c; color: var(--ink); font: 15px/1.4 system-ui, 'Segoe UI', Roboto, sans-serif; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+#app { position: fixed; inset: 0; }
+#cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.hidden { display: none !important; }
+
+/* ---------- ruudut ---------- */
+.screen { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 16px; padding-top: max(16px, env(safe-area-inset-top)); background: var(--bg); -webkit-overflow-scrolling: touch; }
+.screen.title-scr { background: linear-gradient(180deg, rgba(0,0,0,0.15), var(--bg) 70%); display: flex; align-items: center; justify-content: center; }
+.screen.dim { background: rgba(0, 0, 0, 0.55); }
+.panel { background: var(--panel); border-radius: 12px; padding: 18px; margin: 0 auto 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+.panel::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--stripe); }
+.panel.wide { max-width: 1120px; }
+.panel.narrow { max-width: 600px; }
+.phead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+h1, h2, h3 { font-family: var(--head); letter-spacing: 0.02em; margin: 0.4em 0 0.3em; line-height: 1.1; }
+h2 { font-size: 26px; color: var(--accent); text-transform: uppercase; }
+h3 { font-size: 16px; text-transform: uppercase; }
+p { margin: 0.4em 0; }
+.intro { font-size: 15px; line-height: 1.55; }
+.hint { color: var(--muted); font-size: 13px; }
+.warn { color: #fff; background: var(--accent2); padding: 8px 12px; border-radius: 8px; }
+small { color: var(--muted); }
+.big { font-size: 17px; }
+
+/* ---------- napit ---------- */
+.btn { font: 600 15px/1.2 system-ui, sans-serif; color: var(--btnInk); background: var(--btn); border: 2px solid var(--line); border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: transform .08s, filter .15s; touch-action: manipulation; }
+.btn:hover { filter: brightness(1.15); }
+.btn:active { transform: scale(0.97); }
+.btn.primary { background: var(--accent); color: #1a1208; border-color: transparent; }
+html[data-theme-game="kyla"] .btn.primary { color: #fff; }
+.btn.big { font-size: 18px; padding: 14px 20px; width: 100%; text-align: left; }
+.btn.big small { display: block; font-size: 12px; font-weight: 500; margin-top: 2px; color: inherit; opacity: 0.75; }
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.btn.sel { outline: 3px solid var(--accent); outline-offset: 1px; }
+.btn.dis { opacity: 0.45; }
+.btn em { font-style: normal; background: var(--accent2); color: #fff; border-radius: 6px; padding: 1px 6px; margin-left: 6px; font-size: 13px; }
+.row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.menu { display: flex; flex-direction: column; gap: 10px; }
+.menu .row { margin-top: 0; }
+.menu .row .btn { flex: 1; }
+
+/* ---------- päävalikko ---------- */
+.title { text-align: center; max-width: 440px; width: 100%; }
+.logo { font-family: var(--head); font-size: clamp(38px, 11.5vw, 96px); margin: 0; line-height: 0.9; letter-spacing: 0.02em; text-shadow: 0 6px 0 rgba(0,0,0,0.5), 0 0 40px rgba(0,0,0,0.6); }
+.logo .l1 { color: var(--ink); }
+.logo .l2 { color: var(--accent); }
+html[data-theme-game="kyla"] .logo .l1 { color: #fff7dc; }
+.title .sub { font-size: 17px; margin: 6px 0 20px; color: #f3e6c8; text-shadow: 0 2px 6px #000; }
+.title .menu .btn.big { text-align: center; }
+.themes { margin-top: 18px; display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; color: #f3e6c8; text-shadow: 0 1px 3px #000; }
+.foot { margin-top: 18px; font-size: 12px; color: #d8cbb0; text-shadow: 0 1px 3px #000; opacity: 0.8; }
+.field { display: block; margin: 14px 0; font-weight: 600; }
+.field input { display: block; width: 100%; margin-top: 6px; font: 600 18px system-ui; padding: 10px 12px; border-radius: 8px; border: 2px solid var(--line); background: var(--panel2); color: var(--ink); }
+
+/* ---------- yläpalkki ---------- */
+.topbar { max-width: 1120px; margin: 0 auto 12px; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; background: var(--panel); border-radius: 10px; padding: 10px 14px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+.topbar .pname { font-family: var(--head); font-size: 18px; color: var(--accent); margin-right: auto; }
+.topbar .debt { color: var(--accent2); }
+
+/* ---------- varikko ---------- */
+.hub { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 14px; }
+.card { background: var(--panel); border-radius: 12px; padding: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.4); }
+.garage canvas { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto; background: radial-gradient(ellipse at center, rgba(255,255,255,0.08), transparent 70%); border-radius: 10px; }
+.garage h3 { font-size: 22px; text-align: center; }
+.kit { text-align: center; color: var(--muted); font-size: 13px; }
+.garage .row { justify-content: center; }
+.hubmenu { display: flex; flex-direction: column; gap: 10px; }
+.hp { position: relative; height: 22px; background: rgba(0,0,0,0.35); border-radius: 6px; overflow: hidden; margin: 6px 0; }
+.hp i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--good); }
+.hp.mid i { background: #e0b030; }
+.hp.bad i { background: #e04030; }
+.hp span { position: relative; display: block; text-align: center; font-weight: 700; font-size: 13px; line-height: 22px; color: #fff; text-shadow: 0 1px 2px #000; }
+
+/* ---------- kisatarjoukset ---------- */
+.offers { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.offer { border-top: 5px solid var(--good); background: var(--panel2); }
+.offer.d1 { border-top-color: var(--accent); }
+.offer.d2 { border-top-color: var(--accent2); }
+.offer.d3 { border-top-color: #000; box-shadow: 0 0 0 2px var(--accent), 0 6px 24px rgba(0,0,0,0.4); }
+.ohead { display: flex; gap: 10px; align-items: center; }
+.ohead canvas { width: 120px; height: 80px; background: rgba(0,0,0,0.25); border-radius: 8px; flex: none; }
+.ohead h3 { margin-top: 0; }
+.prizes { font-size: 13px; }
+.bossline { font-style: italic; color: var(--accent2); }
+.opp { list-style: none; padding: 0; margin: 8px 0; }
+.opp li { padding: 3px 0; font-weight: 600; }
+.opp li small { display: block; font-weight: 500; margin-left: 18px; }
+.opp li i, .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 7px; vertical-align: -1px; border: 1px solid rgba(0,0,0,0.5); }
+.opp li.boss { color: var(--accent2); }
+
+/* ---------- kauppa ---------- */
+.shopgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.shopgrid canvas { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto; }
+.srow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.srow:last-child { border-bottom: 0; }
+.sinfo { min-width: 0; }
+.sinfo .desc { display: block; }
+.pips { display: inline-flex; gap: 3px; margin-left: 8px; vertical-align: middle; }
+.pips i { width: 12px; height: 8px; border-radius: 2px; background: rgba(128,128,128,0.35); }
+.pips i.on { background: var(--accent); }
+.maxed { color: var(--muted); font-weight: 700; white-space: nowrap; }
+.srow .btn { white-space: nowrap; flex: none; }
+.stats { margin-top: 8px; }
+.stat { display: grid; grid-template-columns: 96px 1fr 70px; gap: 8px; align-items: center; font-size: 12px; margin: 3px 0; }
+.stat i { height: 8px; background: rgba(128,128,128,0.25); border-radius: 4px; overflow: hidden; }
+.stat i b { display: block; height: 100%; background: var(--accent); }
+.stat em { font-style: normal; color: var(--muted); text-align: right; }
+
+/* ---------- konekauppa ---------- */
+.vehs { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.veh { background: var(--panel2); display: flex; flex-direction: column; }
+.veh.own { box-shadow: 0 0 0 3px var(--accent); }
+.veh canvas { width: 100%; height: auto; max-width: 260px; margin: 0 auto; display: block; }
+.veh h3 { margin-bottom: 0; }
+.veh .desc { font-size: 13px; color: var(--muted); flex: 1; }
+.veh .price { font-weight: 700; font-size: 16px; }
+.veh .btn, .veh .maxed { margin-top: 6px; }
+
+/* ---------- taulukot ja tulokset ---------- */
+.tbl { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.tbl td, .tbl th { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.tbl th { font-size: 12px; color: var(--muted); text-transform: uppercase; }
+.tbl td:last-child, .tbl th:last-child { text-align: right; }
+.tbl tr.me td { color: var(--accent); font-weight: 800; }
+.tbl tr.boss td { color: var(--accent2); font-weight: 700; }
+.tbl.money tr.sum td { font-weight: 800; font-size: 17px; border-top: 2px solid var(--accent); }
+.results { text-align: center; }
+.results .tbl td { text-align: left; }
+.results .tbl td:last-child { text-align: right; }
+.place { font-size: 64px; margin: 0.1em 0; }
+.place.p1 { color: #f2c230; }
+.quip { font-size: 16px; font-style: italic; }
+.results .row, .ending .row, .pause .row { justify-content: center; }
+.ending { text-align: center; }
+.ending .logo { font-size: 64px; }
+
+/* ---------- pikakisa ---------- */
+.tracks { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+.tbtn { background: var(--panel2); border: 2px solid var(--line); border-radius: 10px; padding: 6px; color: var(--ink); cursor: pointer; font: 600 12px system-ui; }
+.tbtn canvas { width: 100%; height: auto; display: block; pointer-events: none; }
+.tbtn span { pointer-events: none; }
+.tbtn.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.row.wrap .btn { flex: 0 0 auto; }
+
+/* ---------- ilmoitukset ---------- */
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--panel); color: var(--ink); border-left: 6px solid var(--good); padding: 12px 16px; border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,0.5); z-index: 50; max-width: min(520px, calc(100vw - 32px)); font-weight: 600; transition: opacity .5s; }
+.toast.bad { border-left-color: var(--accent2); }
+.toast.out { opacity: 0; }
+
+/* ---------- kisan napit ---------- */
+.ibtn { position: absolute; z-index: 5; top: max(10px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); width: 44px; height: 36px; border-radius: 8px; border: 0; background: rgba(0,0,0,0.5); color: #fff; font: 900 16px system-ui; cursor: pointer; }
+#touch { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); pointer-events: none; user-select: none; -webkit-user-select: none; }
+#touch .tb { pointer-events: auto; touch-action: none; border: 2px solid rgba(255,255,255,0.35); background: rgba(0,0,0,0.35); color: rgba(255,255,255,0.9); border-radius: 50%; font: 900 26px system-ui; display: flex; align-items: center; justify-content: center; padding: 0; }
+#touch .tb.on { background: rgba(255,255,255,0.35); }
+.tleft { display: flex; gap: 14px; }
+.tleft .steer { width: 84px; height: 84px; }
+.tright { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.tsmall, .tbig { display: flex; gap: 10px; align-items: flex-end; }
+.tb.sm { width: 52px; height: 52px; font-size: 20px; }
+.tb.fire { width: 84px; height: 84px; background: rgba(200,60,30,0.45) !important; }
+.tb.gas { width: 70px; height: 70px; }
+.tb.brake { width: 56px; height: 56px; font-size: 20px; }
+.tb.fire.on { background: rgba(255,120,60,0.7) !important; }
+
+@media (max-width: 760px) {
+  .hub { grid-template-columns: 1fr; }
+  .screen { padding: 10px; }
+  .panel { padding: 14px; }
+  h2 { font-size: 22px; }
+  .stat { grid-template-columns: 80px 1fr 60px; }
+}
+@media (max-height: 460px) {
+  .tleft .steer, .tb.fire { width: 68px; height: 68px; }
+  .tb.gas { width: 58px; height: 58px; }
+  .tb.sm { width: 44px; height: 44px; }
+}

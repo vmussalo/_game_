@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#1c1712">
+<meta name="description" content="AgriRalli – ylhäältä kuvattu taisteluralli maatalouskoneilla: ruohonleikkurista linkkutraktoriin ja kaivinkoneeseen.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AgriRalli">
+<title>AgriRalli</title>
+<!-- manifest.json (ei .webmanifest), ja evästeet mukaan: toimii myös PIN-suojatussa kansiossa (lataa.php) -->
+<link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/bodymod.css">
+<script>
+  // Virheiden kirjaus (näkyy myös testeissä)
+  window.addEventListener('error', function (e) {
+    var d = document.documentElement;
+    d.setAttribute('data-err', (d.getAttribute('data-err') || '') + (e.message || 'virhe') + ' @ ' + (e.filename || '') + ':' + (e.lineno || 0) + ' | ');
+  });
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="cv" aria-label="Pelialue"></canvas>
+
+  <button id="pauseBtn" class="ibtn hidden" aria-label="Tauko">II</button>
+
+  <div id="touch" class="hidden" aria-hidden="true">
+    <div class="tleft">
+      <button data-k="left" class="tb steer">◀</button>
+      <button data-k="right" class="tb steer">▶</button>
+    </div>
+    <div class="tright">
+      <div class="tsmall">
+        <button data-k="mine" class="tb sm" title="Miina">⬣</button>
+        <button data-k="turbo" class="tb sm" title="Turbo">»</button>
+        <button data-k="special" id="specBtn" class="tb sm hidden" title="Kauha">⤼</button>
+      </div>
+      <div class="tbig">
+        <button data-k="brake" class="tb brake">▼</button>
+        <button data-k="fire" class="tb fire">✷</button>
+        <button data-k="gas" class="tb gas">▲</button>
+      </div>
+    </div>
+  </div>
+
+  <section id="scr" class="screen hidden" aria-live="polite"></section>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/text.js"></script>
+<script src="js/data.js"></script>
+<script src="js/track.js"></script>
+<script src="js/trackart.js"></script>
+<script src="js/vehdraw.js"></script>
+<script src="js/portraits.js"></script>
+<script src="js/race.js"></script>
+<script src="js/render.js"></script>
+<script src="js/input.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/career.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
