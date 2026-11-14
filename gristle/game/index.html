@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gristle &amp; Glitter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="hud" class="hidden">
+  <div id="log"></div>
+  <div id="mid">
+    <div id="loc"></div>
+    <div class="bars">
+      <div class="bar"><span>HP</span><div class="track"><div id="hpfill"></div></div><b id="hptxt"></b></div>
+      <div class="ap"><span>AP</span><div id="appips"></div></div>
+    </div>
+    <div id="weapon" title="Click to reload (R)"></div>
+    <div id="party"></div>
+  </div>
+  <div id="btns">
+    <button data-k="inv" title="Inventory (I)">Inventory</button>
+    <button data-k="char" title="Character (C)">Character</button>
+    <button data-k="skill" title="Use a skill (K)">Skills</button>
+    <button data-k="alm" title="Almanac: quests, rest, save (J)">Almanac</button>
+    <button data-k="sneak" id="bsneak" title="Toggle sneaking (N)">Sneak</button>
+    <button data-k="end" id="bend" title="End turn (Space)">End Turn</button>
+    <button data-k="menu" title="Menu (Esc)">Menu</button>
+  </div>
+</div>
+<div id="tip" class="hidden"></div>
+<div id="toasts"></div>
+<div id="aim" class="hidden"></div>
+<div id="screen" class="hidden"></div>
+<div id="dialog" class="hidden">
+  <canvas id="portrait" width="240" height="280"></canvas>
+  <div class="dbody">
+    <div id="dname"></div>
+    <div id="dtext"></div>
+    <div id="dinter"></div>
+    <ol id="dopts"></ol>
+  </div>
+</div>
+<div id="boot">Loading the Rind…</div>
+
+<script src="js/core/util.js"></script>
+<script src="js/data/rules.js"></script>
+<script src="js/data/items.js"></script>
+<script src="js/data/creatures.js"></script>
+<script src="js/core/mapgen.js"></script>
+<script src="js/data/maps.js"></script>
+<script src="js/core/game.js"></script>
+<script src="js/core/combat.js"></script>
+<script src="js/core/acts.js"></script>
+<script src="js/core/dialog.js"></script>
+<script src="js/core/world.js"></script>
+<script src="js/data/scripts.js"></script>
+<script src="js/data/dialogues.js"></script>
+<script src="gfx/manifest.js"></script>
+<script src="js/ui/sprites.js"></script>
+<script src="js/ui/render.js"></script>
+<script src="js/ui/audio.js"></script>
+<script src="js/ui/worldmap.js"></script>
+<script src="js/ui/ui.js"></script>
+<script src="js/ui/screens.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
