@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fi"><head><meta charset="utf-8"><title>Simulaatiotesti</title></head>
+<body>
+<!-- FarmSim Online – simulaation taustatesti (ei julkaista). Ajetaan Chromen headless-tilassa:
+     scripts/test-headless.sh sim "region=midwest&years=6" -->
+<pre id="out">kesken</pre>
+<script src="../js/util.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/world.js"></script>
+<script src="../js/sim.js"></script>
+<script src="../js/econ.js"></script>
+<script src="../js/actions.js"></script>
+<script src="../js/idle.js"></script>
+<script src="../js/save.js"></script>
+<script>
+(function () {
+  var out = [], qs = new URLSearchParams(location.search);
+  function log(s) { out.push(s); }
+  window.onerror = function (m, f, l) { out.push('VIRHE: ' + m + ' @' + l); document.getElementById('out').textContent = out.join('\n'); };
+  try {
+    var region = qs.get('region') || 'midwest', years = +(qs.get('years') || 5);
+    var crop = qs.get('crop') || 'corn', fields = +(qs.get('fields') || 3), buy = qs.get('buy') !== '0';
+    var G = FS.newGame({ region: region, seed: +(qs.get('seed') || 12345) });
+    log('Alue ' + region + ', koti ' + JSON.stringify(G.home) + ', rahat ' + G.funds);
+    // Pelaaja: odottaa kylvöaikaa ja perustaa pellot kotitilan ympärille
+    var start = +(qs.get('start') || 100);
+    for (var w0 = 0; w0 < start; w0++) FS.stepDay(G);
+    var placed = 0, smart = qs.get('smart') === '1', crops = crop.split(',');
+    for (var y = G.homePlot.y * 8; y < G.homePlot.y * 8 + 16 && placed < fields; y += 1) {
+      for (var x = G.homePlot.x * 8; x < G.homePlot.x * 8 + 24 && placed < fields; x += 1) {
+        var r = FS.placeField(G, x, y, crops[placed % crops.length]);
+        if (r.ok) { placed++; if (smart) for (var w1 = 0; w1 < 10; w1++) FS.stepDay(G); }
+      }
+    }
+    log('Peltoja ' + placed);
+    if (buy) {
+      (smart ? ['tractor', 'plow', 'planter', 'harvester', 'trailer', 'truck', 'sprayer', 'tractor'] : ['tractor', 'plow', 'planter', 'harvester', 'trailer', 'truck']).forEach(function (t, ti) {
+        for (var yy = G.home.y - 3; yy < G.home.y + 8; yy++) for (var xx = G.home.x - 3; xx < G.home.x + 8; xx++) {
+          if (G.machines.filter(function (m) { return m.type === t; }).length > (t === 'tractor' && ti > 0 ? 1 : 0)) return;
+          FS.buyMachine(G, t, xx, yy);
+        }
+      });
+      if (smart) { for (var yy2 = G.home.y - 1; yy2 < G.home.y + 7; yy2++) for (var xx2 = G.home.x - 1; xx2 < G.home.x + 7; xx2++) if (FS.siloCapacity(G) < 1) FS.placeBuilding(G, 'silo_s', xx2, yy2); }
+      log('Koneita ' + G.machines.length + ', siilo ' + FS.siloCapacity(G) + ', rahat ' + Math.round(G.funds));
+    }
+    var t0 = performance.now();
+    var manage = qs.get('manage') === '1';
+    for (var d = 0; d < years * 364; d++) {
+      FS.stepDay(G);
+      if (smart) for (var si = G.silo.length - 1; si >= 0; si--) {
+        var sc = G.silo[si], mk = G.market[sc.crop], avg = mk.hist.reduce(function (a, b) { return a + b; }, 0) / mk.hist.length;
+        if (mk.p > avg * 1.03 || sc.q < 50) FS.sellStored(G, si);
+      }
+      if (manage) Object.keys(G.fields).forEach(function (k) {
+        var f = G.fields[k], c = f.crop && FS.CROP[f.crop];
+        if (f.state !== 'growing') return;
+        if (f.nutr < 35 && !(c.ferSens && f.prog < 0.3)) FS.orderSpray(G, f, 'fert');
+        if (f.weeds > 50) FS.orderSpray(G, f, 'herb');
+        if (f.pests > 50) FS.orderSpray(G, f, 'pest');
+        if (f.disease > 50) FS.orderSpray(G, f, 'fung');
+      });
+      if (G.evalPending) {
+        var e = G.evalPending.rec; G.evalPending = null;
+        var ex = e.detail.exp, inc = e.detail.inc, parts = [];
+        Object.keys(ex).forEach(function (k) { if (ex[k]) parts.push(k + ' ' + Math.round(ex[k])); });
+        log('   tulot ' + JSON.stringify(inc) + ' | kulut ' + parts.join(', '));
+        log('V' + e.year + ': tulos ' + Math.round(e.profit) + ', sadot ' + e.harvests + ', laatu ' + e.quality.toFixed(2) + ', varallisuus ' + e.worth + ', ravinteet ' + e.soil.toFixed(0) + ', taso ' + G.homeLevel + ', kaupunki ' + G.town.plots.length);
+      }
+      if (G.town.vote) FS.voteTown(G, G.town.vote.options[0]);
+    }
+    log('Aika ' + Math.round(performance.now() - t0) + ' ms / ' + years + ' v');
+    var fl = Object.keys(G.fields).map(function (k) { return G.fields[k]; });
+    fl.forEach(function (f) { log('Pelto ' + f.id + ': ' + f.state + ' ' + (f.crop || '-') + ' h=' + f.health.toFixed(0) + ' kost=' + f.moist.toFixed(1) + ' rav=' + f.nutr.toFixed(0) + ' rik=' + f.weeds.toFixed(0) + ' tuh=' + f.pests.toFixed(0) + ' tau=' + f.disease.toFixed(0) + ' sadot=' + f.harvests); });
+    log('Rahat ' + Math.round(G.funds) + ', velka ' + Math.round(FS.debt(G)) + ', gameOver ' + G.gameOver);
+    // Idle-testi
+    var s = FS.serialize(G);
+    log('Tallennuksen koko ' + s.length + ' merkkiä');
+    var G2 = FS.deserialize(s);
+    G2.idle.eff = 1; G2.homeLevel = Math.max(G2.homeLevel, 1);
+    var R = FS.runIdle(G2, 8 * 3600);
+    log('Idle 8 h: ' + JSON.stringify({ days: R.days, funds: Math.round(R.funds), wages: R.wages, harvests: R.harvests, ms: R.ms }));
+    var msgs = G.msgs.slice(-12).map(function (m) { return '  [' + m.type + '] ' + m.text; });
+    log('Viimeiset viestit:\n' + msgs.join('\n'));
+  } catch (e) { log('POIKKEUS: ' + e.message + '\n' + e.stack); }
+  document.getElementById('out').textContent = out.join('\n');
+})();
+</script>
+</body></html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FarmSim Online</title>
+<meta name="description" content="Maatilasimulaatio SimFarmin (Maxis 1993) hengessä – pelaa selaimessa, tila tallentuu nimimerkillesi.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%234f9a2c'/%3E%3Crect x='3' y='6' width='10' height='5' fill='%23c82a20'/%3E%3Crect x='9' y='2' width='4' height='5' fill='%23c82a20'/%3E%3Ccircle cx='4' cy='12' r='2'/%3E%3Ccircle cx='11' cy='12' r='3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app" hidden>
+  <nav id="menubar"></nav>
+  <div id="ctrlbar"></div>
+  <div id="main">
+    <div id="toolbar"></div>
+    <div id="view"><canvas id="cv"></canvas></div>
+  </div>
+  <div id="status"><span id="statusText"></span></div>
+</div>
+<div id="windows"></div>
+<div id="toasts"></div>
+<div id="screen"><div class="card"><p>Ladataan…</p><noscript>Peli vaatii JavaScriptin.</noscript></div></div>
+
+<script src="js/util.js"></script>
+<script src="js/data.js"></script>
+<script src="js/world.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/econ.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/idle.js"></script>
+<script src="js/save.js"></script>
+<script src="js/gfx.js"></script>
+<script src="js/render.js"></script>
+<script src="js/net.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

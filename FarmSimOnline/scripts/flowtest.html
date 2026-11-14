@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fi"><head><meta charset="utf-8"><title>Kulkutesti</title>
+<style>body{margin:0}iframe{width:1280px;height:760px;border:0}pre{position:fixed;right:0;top:0;background:#ffe;max-width:520px;font-size:11px;margin:0;z-index:9;white-space:pre-wrap}</style></head>
+<body>
+<!-- FarmSim Online – kirjautumisen ja tallennuksen kulkutesti (ei julkaista). Vaatii mock_server.py:n:
+     scripts/test-headless.sh flow -->
+<pre id="out">kesken</pre>
+<iframe id="f" src="../index.html"></iframe>
+<script>
+(function () {
+  var out = [], fr = document.getElementById('f'), name = 'Testi' + Math.floor(Math.random() * 1e6), code = null;
+  function log(s) { out.push(s); document.getElementById('out').textContent = out.join('\n'); }
+  function W() { return fr.contentWindow; }
+  function D() { return fr.contentDocument; }
+  function wait(cond, ms, label) {
+    return new Promise(function (res, rej) {
+      var t0 = Date.now();
+      (function poll() {
+        var v; try { v = cond(); } catch (e) { v = null; }
+        if (v) return res(v);
+        if (Date.now() - t0 > ms) return rej(new Error('aikakatkaisu: ' + label));
+        setTimeout(poll, 50);
+      })();
+    });
+  }
+  function reload() { return new Promise(function (r) { fr.onload = function () { r(); }; W().location.reload(); }); }
+  fr.onload = function () {
+    fr.onload = null;
+    wait(function () { return D().getElementById('bNew'); }, 8000, 'kirjautumisnäkymä').then(function () {
+      log('1. Kirjautumisnäkymä OK');
+      D().getElementById('iName').value = name;
+      D().getElementById('bNew').click();
+      return wait(function () { return D().querySelector('.codebox b'); }, 8000, 'koodi');
+    }).then(function (b) {
+      code = b.textContent; log('2. Pelaaja luotu, koodi ' + code);
+      D().querySelector('.reg[data-r="calif"]').click();
+      return wait(function () { var r = D().querySelector('.reg.on'); return r && r.dataset.r === 'calif' && D().getElementById('bPlay'); }, 4000, 'alue');
+    }).then(function () {
+      D().getElementById('iFarm').value = 'Testitila';
+      D().getElementById('bPlay').click();
+      return wait(function () { return !D().getElementById('app').hidden && W().FS.main.G; }, 4000, 'peli');
+    }).then(function () {
+      var FS = W().FS, G = FS.main.G;
+      log('3. Peli käynnissä: ' + G.farmName + ', ' + G.region + ', virheet: ' + (D().body.dataset.err || '-'));
+      var V = FS.view, cv = D().getElementById('cv'), rect = cv.getBoundingClientRect();
+      function click(tx, ty, type) {
+        var z = 16 * V.zoom, x = rect.left + (tx - V.cx + 0.5) * z, y = rect.top + (ty - V.cy + 0.5) * z;
+        cv.dispatchEvent(new (W().PointerEvent)(type || 'pointerdown', { clientX: x, clientY: y, button: 0, bubbles: true, pointerId: 1 }));
+        if (!type) cv.dispatchEvent(new (W().PointerEvent)('pointerup', { clientX: x, clientY: y, button: 0, bubbles: true, pointerId: 1 }));
+      }
+      var fx = G.homePlot.x * 8 + 8, fy = G.homePlot.y * 8;
+      FS.centerOn(fx + 4, fy + 4);
+      FS.ui.startPlace({ kind: 'field', crop: 'tomatoes' });
+      click(fx + 3, fy + 3);
+      var nf = Object.keys(G.fields).length;
+      log('4. Pelto hiirellä: ' + nf + ' kpl, peltoikkuna auki: ' + !!FS.ui.wins.field + ', tila: ' + D().getElementById('statusText').textContent);
+      FS.ui.setTool('dirt');
+      var ry = G.homePlot.y * 8 + 9;
+      click(G.homePlot.x * 8 + 1, ry, 'pointerdown'); click(G.homePlot.x * 8 + 6, ry, 'pointermove'); click(G.homePlot.x * 8 + 6, ry, 'pointerup');
+      var roads = 0; for (var k = 0; k < FS.MAP * FS.MAP; k++) if (G.obj[k] === FS.O.DIRT_ROAD) roads++;
+      log('4b. Hiekkatie vedetty: ' + roads + ' ruutua');
+      ['buy', 'sell', 'map', 'weather', 'balance', 'bank', 'market', 'expert', 'eval', 'manager', 'neighbors', 'log', 'help', 'about'].forEach(function (w) { FS.ui.open(w); });
+      ['machines', 'seeds', 'animals', 'buildings', 'sprays'].forEach(function (t) { FS.ui.buyTab = t; FS.ui.refresh('buy'); });
+      ['crops', 'advice', 'machines', 'animals', 'sprays'].forEach(function (t) { FS.ui.expertTab = t; FS.ui.refresh('expert'); });
+      FS.MAP_MODES.forEach(function (m) { FS.ui.mapMode = m.id; FS.ui.refresh('map'); });
+      log('4c. Ikkunat avattu: ' + Object.keys(FS.ui.wins).length + ', virheet: ' + (D().body.dataset.err || '-'));
+      Object.keys(FS.ui.wins).forEach(function (w) { FS.ui.close(w); });
+      FS.buyAnimal(G, 'cow', true, G.home.x + 5, G.home.y + 1);
+      FS.applyTool(G, 'feed', G.home.x + 6, G.home.y + 2); FS.applyTool(G, 'trough', G.home.x + 6, G.home.y + 3);
+      for (var d0 = 0; d0 < 400; d0++) { FS.stepDay(G); if (G.town.vote) FS.voteTown(G, G.town.vote.options[0]); }
+      FS.render(G, 0.5, 1000);
+      log('4d. 400 päivää ajettu: päivä ' + G.day + ', eläimiä ' + G.animals.length + ', rahat ' + Math.round(G.funds) + ', virheet: ' + (D().body.dataset.err || '-'));
+      G.evalPending = null;
+      G.idle.eff = 0.5;
+      for (var d = 0; d < 3; d++) FS.stepDay(G);
+      FS.main.save(false);
+      return wait(function () { return !FS.main.dirty && D().getElementById('statusText').textContent.indexOf('Tallennettu') >= 0; }, 5000, 'tallennus');
+    }).then(function () {
+      log('5. Tallennettu, päivä ' + W().FS.main.G.day);
+      return reload();
+    }).then(function () {
+      return wait(function () { return D().getElementById('bCont'); }, 8000, 'jatka-nappi');
+    }).then(function (b) {
+      log('6. Muistettu kirjautuminen: ' + b.textContent);
+      // Simuloidaan 5 tunnin poissaolo siirtämällä palvelimen aikaleimaa: kutsutaan idleä suoraan kirjautumisen jälkeen
+      b.click();
+      return wait(function () { return W().FS.main.G && !D().getElementById('app').hidden && W().FS.main.G; }, 6000, 'lataus');
+    }).then(function (G) {
+      var FS = W().FS;
+      log('7. Ladattu: päivä ' + G.day + ', peltoja ' + Object.keys(G.fields).length + ', idle-teho ' + G.idle.eff);
+      FS.main.applyIdle(5 * 3600);
+      var R = FS.ui.idleSummary;
+      log('8. Idle 5 h: ' + (R ? R.days + ' pv, kassa ' + Math.round(R.funds) + ', palkat ' + R.wages + ', ikkuna ' + !!FS.ui.wins.idle : 'ei tulosta'));
+      return fetch('../api/farm.php?a=top&me=' + encodeURIComponent(name)).then(function (r) { return r.json(); });
+    }).then(function (j) {
+      var me = (j.entries || []).filter(function (e) { return e.me; })[0];
+      log('9. Naapurit: ' + (j.entries || []).length + ' riviä, oma: ' + JSON.stringify(me));
+      // Väärä koodi
+      return fetch('../api/farm.php', { method: 'POST', body: JSON.stringify({ a: 'login', name: name, code: 'VAARA-0000' }) }).then(function (r) { return r.json(); });
+    }).then(function (j) {
+      log('10. Väärä koodi: ' + JSON.stringify(j));
+      log('VALMIS, virheet: ' + (D().body.dataset.err || '-'));
+    }).catch(function (e) { log('VIRHE: ' + e.message + ' / sivun virheet: ' + (D().body.dataset.err || '-')); });
+  };
+})();
+</script>
+</body></html>

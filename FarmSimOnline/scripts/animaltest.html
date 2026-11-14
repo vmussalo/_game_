@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fi"><head><meta charset="utf-8"><title>Eläintesti</title></head>
+<body>
+<!-- FarmSim Online – eläinten ruokinnan testi (ei julkaista). file:// tai mock-palvelimelta. -->
+<pre id="out">kesken</pre>
+<script src="../js/util.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/world.js"></script>
+<script src="../js/sim.js"></script>
+<script src="../js/econ.js"></script>
+<script src="../js/actions.js"></script>
+<script src="../js/idle.js"></script>
+<script src="../js/save.js"></script>
+<script>
+(function () {
+  var out = [];
+  function log(s) { out.push(s); }
+  try {
+    var G = FS.newGame({ region: 'midwest', seed: 777 });
+    G.options.disasters = false;
+    for (var w = 0; w < 100; w++) FS.stepDay(G);
+    var x0 = G.homePlot.x * 8 + 9, y0 = G.homePlot.y * 8 + 1;
+    // Aitaus 6×6
+    for (var k = 0; k < 7; k++) { FS.applyTool(G, 'fence', x0 + k, y0); FS.applyTool(G, 'fence', x0 + k, y0 + 6); FS.applyTool(G, 'fence', x0, y0 + k); FS.applyTool(G, 'fence', x0 + 6, y0 + k); }
+    log('Lehmä: ' + JSON.stringify(FS.buyAnimal(G, 'cow', true, x0 + 2, y0 + 2)));
+    log('Sika: ' + JSON.stringify(FS.buyAnimal(G, 'pig', false, x0 + 3, y0 + 3)));
+    for (var d = 0; d < 5; d++) FS.stepDay(G);
+    log('5 pv ilman rehua: ' + G.animals.map(function (a) { return a.type + ' nälkä=' + a.hungry + ' jano=' + a.thirsty + ' kunto=' + Math.round(a.health); }).join(' | '));
+    var fx = -1, fy = -1;
+    for (var yy = y0 + 1; yy < y0 + 6 && fx < 0; yy++) for (var xx = x0 + 5; xx > x0; xx--) if (G.obj[FS.idx(xx, yy)] === FS.O.NONE && !G.animals.some(function (a) { return a.x === xx && a.y === yy; })) { fx = xx; fy = yy; break; }
+    log('Rehu ' + fx + ',' + fy + ': ' + JSON.stringify(FS.applyTool(G, 'feed', fx, fy)) + ' Kaukalo: ' + JSON.stringify(FS.applyTool(G, 'trough', x0 + 1, y0 + 4)));
+    x0 = fx - 4; y0 = fy - 4;
+    for (d = 0; d < 10; d++) {
+      FS.stepDay(G);
+      log('pv ' + d + ': ' + G.animals.map(function (a) { return a.type + '@' + a.x + ',' + a.y + ' reg=' + G._region[FS.idx(a.x, a.y)] + ' nälkä=' + a.hungry + ' jano=' + a.thirsty + ' kunto=' + Math.round(a.health); }).join(' | ') + ' | rehu ' + JSON.stringify(G.feeds) + ' reg(rehu)=' + G._region[FS.idx(x0 + 4, y0 + 4)]);
+    }
+    // Tallennus ja lataus välissä
+    var G2 = FS.deserialize(FS.serialize(G));
+    for (d = 0; d < 5; d++) FS.stepDay(G2);
+    log('Latauksen jälkeen: ' + G2.animals.map(function (a) { return a.type + ' nälkä=' + a.hungry + ' jano=' + a.thirsty; }).join(' | ') + ' rehu ' + JSON.stringify(G2.feeds));
+  } catch (e) { log('POIKKEUS: ' + e.message + '\n' + e.stack); }
+  document.getElementById('out').textContent = out.join('\n');
+})();
+</script>
+</body></html>
