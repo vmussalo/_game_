@@ -1,0 +1,6 @@
+{
+  "name": "agristuntti-testit",
+  "private": true,
+  "type": "module",
+  "description": "Vain Node-testejä varten: peli/js-tiedostot ovat ES-moduuleja. Ei julkaista."
+}

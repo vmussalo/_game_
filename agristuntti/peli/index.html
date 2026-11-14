@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#2b3a22">
+<meta name="description" content="AgriStuntti – 3D-stunttiajoa maatalouskoneilla: silmukat, hyppyrit, kallistetut kaarteet ja oma rataeditori.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AgriStuntti">
+<title>AgriStuntti</title>
+<!-- manifest.json ja evästeet mukaan: toimii myös PIN-suojatussa kansiossa -->
+<link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  window.addEventListener('error', function (e) { var d = document.documentElement; d.setAttribute('data-err', (d.getAttribute('data-err') || '') + (e.message || 'virhe') + ' | '); });
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="cv" aria-label="Pelinäkymä"></canvas>
+
+  <div id="hud" class="hidden" aria-hidden="true">
+    <div class="hud-tl">
+      <div id="hudTime" class="hud-time">0.00</div>
+      <div id="hudBest" class="hud-small"></div>
+      <div class="hud-prog"><i id="hudProg"></i></div>
+      <div id="hudOpp" class="hud-small"></div>
+    </div>
+    <canvas id="hudMap" width="170" height="130"></canvas>
+    <div class="hud-speed"><b id="hudSpeed">0</b><small>km/h</small><span id="hudGear">1</span></div>
+    <div id="hudMsg" class="hud-msg"></div>
+  </div>
+
+  <div id="rpbar" class="hidden">
+    <button data-r="start" title="Alkuun">⏮</button>
+    <button data-r="back" title="5 s taaksepäin">⏪</button>
+    <button data-r="play" id="rpPlay" title="Tauko / toisto">⏸</button>
+    <button data-r="slow" title="Hitaammin">🐢</button>
+    <button data-r="fast" title="Nopeammin">🐇</button>
+    <button data-r="cam" title="Kamera">🎥</button>
+    <span id="rpTime"></span>
+    <button data-r="exit" title="Lopeta uusinta">✕</button>
+  </div>
+
+  <div id="touch" class="hidden" aria-hidden="true">
+    <div class="tl"><button data-k="left" class="tb">◀</button><button data-k="right" class="tb">▶</button></div>
+    <div class="tm"><button data-k="pause" class="tb sm">II</button><button data-k="cam" class="tb sm">🎥</button><button data-k="reset" class="tb sm">↺</button></div>
+    <div class="tr"><button data-k="brake" class="tb">▼</button><button data-k="gas" class="tb gas">▲</button></div>
+  </div>
+
+  <section id="scr" class="screen hidden" aria-live="polite"></section>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
