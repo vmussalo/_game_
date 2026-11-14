@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#22163a">
+<meta name="description" content="Elämänkoulu – taistelupeli arjen sankareilla. Jokainen voitto jakaa elämänohjeen.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Elämänkoulu">
+<title>Elämänkoulu</title>
+<!-- manifest.json (ei .webmanifest), ja evästeet mukaan: toimii myös PIN-suojatussa kansiossa (lataa.php) -->
+<link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // Virheiden kirjaus (näkyy myös testeissä)
+  window.addEventListener('error', function (e) {
+    var d = document.documentElement;
+    d.setAttribute('data-err', (d.getAttribute('data-err') || '') + (e.message || 'virhe') + ' @ ' + (e.filename || '') + ':' + (e.lineno || 0) + ' | ');
+  });
+</script>
+</head>
+<body>
+<canvas id="cv" aria-label="Pelialue"></canvas>
+
+<div id="touch" class="hidden" aria-hidden="true">
+  <div class="stick"><div class="knob"></div></div>
+  <div class="tbtns">
+    <button data-b="L" class="tb">N</button>
+    <button data-b="M" class="tb">K</button>
+    <button data-b="H" class="tb">I</button>
+    <button data-b="S+H" class="tb su">OIVALLUS</button>
+    <button data-b="S" class="tb sp">ERIKOIS</button>
+    <button data-b="P" class="tb br">HENGITÄ</button>
+    <button data-b="L+M" class="tb th">HEITTO</button>
+  </div>
+  <button id="pauseBtn" class="tpause" aria-label="Tauko">II</button>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/text.js"></script>
+<script src="js/data.js"></script>
+<script src="js/moves.js"></script>
+<script src="js/fighter.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/poses.js"></script>
+<script src="js/rig.js"></script>
+<script src="js/stages.js"></script>
+<script src="js/render.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/input.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

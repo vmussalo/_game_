@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fi"><head><meta charset="utf-8"><title>Asennot</title>
+<style>html,body{margin:0;background:#3a3f4a}canvas{display:block}</style></head>
+<body>
+<canvas id="c"></canvas>
+<script src="../peli/js/util.js"></script>
+<script src="../peli/js/text.js"></script>
+<script src="../peli/js/data.js"></script>
+<script src="../peli/js/moves.js"></script>
+<script src="../peli/js/poses.js"></script>
+<script src="../peli/js/rig.js"></script>
+<script>
+  // Testisivu: ?mode=chars (kaikki hahmot perusasennossa) tai ?mode=poses&ch=kaisa (yhden hahmon kaikki asennot)
+  const q = new URLSearchParams(location.search);
+  const mode = q.get('mode') || 'chars';
+  const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  const names = q.get('poses') ? q.get('poses').split(',') : Object.keys(EK.POSES);
+  if (mode === 'chars') {
+    const pose = EK.POSES[q.get('pose') || 'stance'];
+    cv.width = 1200; cv.height = 300;
+    EK.CHARS.forEach((c, i) => {
+      ctx.save(); ctx.translate(80 + i * 145, 270); ctx.scale(c.size * 1.1, c.size * 1.1);
+      ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(0, 0, 40, 8, 0, 0, 6.3); ctx.fill();
+      EK.drawChar(ctx, c, pose, { cane: true });
+      ctx.restore();
+      ctx.fillStyle = '#fff'; ctx.font = '13px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(c.name, 80 + i * 145, 292);
+    });
+  } else {
+    const c = EK.CHAR[q.get('ch') || 'kaisa'];
+    const cols = 10, cw = 120, chh = 210;
+    cv.width = cols * cw; cv.height = Math.ceil(names.length / cols) * chh;
+    names.forEach((n, i) => {
+      const x = (i % cols) * cw + 60, y = Math.floor(i / cols) * chh + 185;
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.beginPath(); ctx.moveTo(x - 55, y); ctx.lineTo(x + 55, y); ctx.stroke();
+      ctx.save(); ctx.translate(x, y); ctx.scale(0.85, 0.85);
+      EK.drawChar(ctx, c, EK.POSES[n], {});
+      ctx.restore();
+      ctx.fillStyle = '#fff'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(n, x, y + 18);
+    });
+  }
+</script>
+</body></html>

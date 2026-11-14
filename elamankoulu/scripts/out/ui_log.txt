@@ -1,0 +1,36 @@
+  OK   aloitusruutu avautuu
+  OK   pääsilmukka käy noin 60 ruutua sekunnissa (32 ruutua / noin 0,5 s)
+Pelihalli
+  OK   Enter → hahmovalinta
+  OK   valinta → vastakkainasettelu
+  OK   ottelu alkaa (välinäytös ohitettu Enterillä)
+  OK   erä käynnistyy (intro ja "NYT!")
+  OK   D kävelee eteenpäin (600 → 682)
+  OK   ↓↘→ + J tekee Kuuman kupin (liikkeet: ['s1L'])
+  OK   K tekee etupotkun
+  OK   Esc pysäyttää
+  OK   tauolla ottelu ei etene
+  OK   liikelista aukeaa
+  OK   jatka tauolta
+  OK   ottelu päättyy tulosnäkymään
+  OK   tulosnäkymässä elämänohje: Kiire on usein valinta. Valitse huomenna hidas aamu.
+  OK   ohje tallentui Opetuskirjaan
+Harjoittelu ja hiiri
+  OK   hiiriklikkaus avaa harjoittelun
+  OK   harjoitteluottelu käynnissä
+  OK   isku osuu nukkeen
+  OK   I = Hengitä
+  OK   S + I = Lepohetki
+  OK   U + L yhtä aikaa = OIVALLUS-superliike (['sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup'])
+Kaksinpeli samalla näppäimistöllä
+  OK   molemmat valitsivat
+  OK   P1 (WASD) ja P2 (nuolet) liikkuvat yhtä aikaa
+  OK   P1 G = keski, P2 L = iso (['0sM', '1sH'])
+Kosketus
+  OK   kosketusohjaimet näkyvät
+  OK   kosketuksella moderni ohjaus
+  OK   OIVALLUS-kosketusnappi tekee superliikkeen
+  OK   ERIKOIS-nappi tekee erikoisliikkeen (['s1M', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup', 'sup'])
+  OK   ei JavaScript-virheitä
+
+Virheitä: 0

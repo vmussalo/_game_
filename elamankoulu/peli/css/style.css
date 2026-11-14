@@ -1,0 +1,20 @@
+html, body { margin: 0; height: 100%; background: #0d0a14; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+#cv { position: absolute; display: block; image-rendering: auto; }
+.hidden { display: none !important; }
+
+/* Kosketusohjaus */
+#touch { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+#touch .stick { position: absolute; left: max(16px, env(safe-area-inset-left)); bottom: 18px; width: 150px; height: 150px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.25); pointer-events: auto; touch-action: none; }
+#touch .knob { position: absolute; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%;
+  background: rgba(255,207,58,0.55); border: 2px solid rgba(255,255,255,0.6); }
+#touch .tbtns { position: absolute; right: max(14px, env(safe-area-inset-right)); bottom: 14px; display: grid; grid-template-columns: repeat(4, 66px); gap: 8px; pointer-events: auto; }
+#touch .tb { height: 58px; border-radius: 14px; border: 2px solid rgba(255,255,255,0.4); background: rgba(30,20,45,0.55); color: #fff;
+  font: bold 16px "Trebuchet MS", sans-serif; touch-action: none; padding: 0; }
+#touch .tb.sp { background: rgba(122,75,216,0.6); font-size: 11px; }
+#touch .tb.br { background: rgba(95,224,182,0.45); font-size: 11px; }
+#touch .tb.th { background: rgba(255,255,255,0.15); font-size: 11px; }
+#touch .tb.su { background: rgba(255,111,168,0.6); font-size: 10px; grid-row: span 2; height: auto; }
+#touch .tb.on { background: rgba(255,207,58,0.8); color: #1b1622; }
+#touch .tpause { position: absolute; top: 64px; left: 50%; margin-left: -20px; width: 40px; height: 34px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.4);
+  background: rgba(30,20,45,0.6); color: #fff; font: bold 14px sans-serif; pointer-events: auto; }
